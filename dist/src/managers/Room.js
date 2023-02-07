@@ -24,7 +24,7 @@ const createRoom = (userId, name) => __awaiter(void 0, void 0, void 0, function*
     const [user] = yield userRepo.getUserById(userId);
     if (!user)
         return false; // user does not exist
-    if (user.type !== User_1.USER_TYPE.Guest)
+    if (user.type === User_1.USER_TYPE.Guest)
         return false; // Guest cannot make rooms
     if (!name)
         return false; // name cannot be empty string

@@ -80,7 +80,8 @@ const readAcceptedRooms = (req, res) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.readAcceptedRooms = readAcceptedRooms;
 const createRoom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId, name } = req.body;
+    const userId = req.headers[X_USER_ID];
+    const { name } = req.body;
     const createRoomSuccess = yield roomManager.createRoom(userId, name);
     if (createRoomSuccess) {
         return res.status(201).send({ message: "Room created." });

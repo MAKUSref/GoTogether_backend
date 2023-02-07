@@ -62,7 +62,8 @@ export const readAcceptedRooms = async (req: Request, res: Response) => {
 }
 
 export const createRoom = async (req: Request, res: Response) => {
-  const { userId, name } = req.body;
+  const userId = req.headers[X_USER_ID] as string;
+  const { name } = req.body;
 
   const createRoomSuccess = await roomManager.createRoom(userId, name);
 
