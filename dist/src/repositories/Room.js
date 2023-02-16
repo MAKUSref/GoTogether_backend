@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Redis_1 = __importDefault(require("../redis/Redis"));
-const KEY = 'rooms';
+const KEY = "rooms";
 class RoomRepository {
     constructor() {
         this.redis = new Redis_1.default(KEY);
