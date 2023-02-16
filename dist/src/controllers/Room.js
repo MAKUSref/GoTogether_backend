@@ -130,7 +130,7 @@ const deleteFromHosts = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.deleteFromHosts = deleteFromHosts;
 const requestUserToJoin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { pin, userId } = req.body;
-    const isUserAdded = yield roomManager.requestUserToRoom(pin, userId);
+    const isUserAdded = yield roomManager.requestUserToRoom(Number(pin), userId);
     if (isUserAdded) {
         return res.status(201).send({ message: "User joined to room correctly." });
     }

@@ -1,12 +1,12 @@
-import Room, { IRoom } from '../model/Room';
-import { IUser } from '../model/User';
-import Redis from '../redis/Redis';
+import Room, { IRoom } from "../model/Room";
+import { IUser } from "../model/User";
+import Redis from "../redis/Redis";
 
-const KEY = 'rooms';
+const KEY = "rooms";
 
 class RoomRepository {
   redis = new Redis<IRoom>(KEY);
-  
+
   async addRoom(room: IRoom): Promise<boolean> {
     return await this.redis.addValue(room);
   }
@@ -16,7 +16,9 @@ class RoomRepository {
     return rooms;
   }
 
-  async getBy(callback: (room: IRoom, index: number) => boolean): Promise<Room[]> {
+  async getBy(
+    callback: (room: IRoom, index: number) => boolean
+  ): Promise<Room[]> {
     const rooms = await this.getAll();
     return rooms.filter((room: IRoom, index: number) => callback(room, index));
   }
@@ -34,7 +36,9 @@ class RoomRepository {
   }
 
   async getByRequestedUserId(userId: string): Promise<IRoom[]> {
-    return await this.getBy((room: IRoom) => room.requestingUsers.includes(userId));
+    return await this.getBy((room: IRoom) =>
+      room.requestingUsers.includes(userId)
+    );
   }
 
   async getByAcceptedUserId(userId: string): Promise<IRoom[]> {
@@ -79,7 +83,9 @@ class RoomRepository {
 
     const updatedRoom = rooms.map((room) => {
       if (room.id === roomId) {
-        room.requestingUsers = room.requestingUsers.filter((id) => id !== userId);
+        room.requestingUsers = room.requestingUsers.filter(
+          (id) => id !== userId
+        );
       }
 
       return room;
@@ -107,7 +113,9 @@ class RoomRepository {
 
     const updatedRoom = rooms.map((room) => {
       if (room.id === roomId) {
-        room.requestingUsers = room.requestingUsers.filter((id) => id !== userId);
+        room.requestingUsers = room.requestingUsers.filter(
+          (id) => id !== userId
+        );
         room.users.push(userId);
       }
 

@@ -126,9 +126,9 @@ export const deleteFromHosts = async (req: Request, res: Response) => {
 }
 
 export const requestUserToJoin = async (req: Request, res: Response) => {
-  const { pin, userId }: { pin: number, userId: string } = req.body;  
+  const { pin, userId }: { pin: string, userId: string } = req.body;  
 
-  const isUserAdded = await roomManager.requestUserToRoom(pin, userId);
+  const isUserAdded = await roomManager.requestUserToRoom(Number(pin), userId);
 
   if (isUserAdded) {
     return res.status(201).send({ message: "User joined to room correctly." });
