@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
+exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
 const Room_1 = __importDefault(require("../model/Room"));
 const User_1 = require("../model/User");
 const Room_2 = __importDefault(require("../repositories/Room"));
@@ -60,6 +60,17 @@ const readAcceptedRooms = (userId) => __awaiter(void 0, void 0, void 0, function
     return rooms;
 });
 exports.readAcceptedRooms = readAcceptedRooms;
+const readProfileRooms = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const hostedRooms = yield roomRepo.getByHostId(userId);
+    const joinedRooms = yield roomRepo.getByAcceptedUserId(userId);
+    const requestedRooms = yield roomRepo.getByRequestedUserId(userId);
+    return {
+        host: hostedRooms,
+        user: joinedRooms,
+        request: requestedRooms
+    };
+});
+exports.readProfileRooms = readProfileRooms;
 const deleteRoom = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const [room] = yield roomRepo.getByRoomId(roomId);
     if (!room)

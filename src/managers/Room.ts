@@ -54,6 +54,18 @@ export const readAcceptedRooms = async (userId: string): Promise<IRoom[]> => {
   return rooms;
 }
 
+export const readProfileRooms = async (userId: string): Promise<{ host: IRoom[], user: IRoom[], request: IRoom[] }> => {
+  const hostedRooms = await roomRepo.getByHostId(userId);
+  const joinedRooms = await roomRepo.getByAcceptedUserId(userId);
+  const requestedRooms = await roomRepo.getByRequestedUserId(userId);
+
+  return {
+    host: hostedRooms,
+    user: joinedRooms,
+    request: requestedRooms
+  };
+}
+
 export const deleteRoom = async (roomId: string): Promise<boolean> => {
   const [room] = await roomRepo.getByRoomId(roomId);
 
