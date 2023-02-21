@@ -17,7 +17,7 @@ DELETE<br />
 <br />
 
 ### Rooms (/api/room/)
-<br />
+
 POST<br />
 `/` - create room<br />
 <br />
