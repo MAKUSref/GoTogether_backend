@@ -61,6 +61,14 @@ export const readAcceptedRooms = async (req: Request, res: Response) => {
   return res.status(404).json({ room, message: "No rooms were found." });
 }
 
+export const readProfileRooms = async (req: Request, res: Response) => {
+  const userId = req.headers[X_USER_ID] as string;
+
+  const rooms = await roomManager.readProfileRooms(userId);
+
+  return res.status(200).json({...rooms});
+}
+
 export const createRoom = async (req: Request, res: Response) => {
   const userId = req.headers[X_USER_ID] as string;
   const { name } = req.body;
