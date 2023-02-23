@@ -47,7 +47,7 @@ class RoomRepository {
 
   async deleteRoom(id: string) {
     const rooms = (await this.getAll()).filter((room: IRoom) => room.id !== id);
-    await this.redis.setValues(rooms);
+    return await this.redis.setValues(rooms);
   }
 
   async deleteFromUserList(roomId: string, userId: string) {
@@ -141,7 +141,27 @@ class RoomRepository {
 
     return await this.redis.setValues(updatedRoom);
   }
+  async leaveRoom(roomId: string, requestingUsers: string) {
+    const rooms = await this.getAll();
 
+    const updatedRoom = rooms.map((room) => {
+      if (room.id === roomId) {
+        room.hosts = room.users.filter(
+          (id) => id !== requestingUsers
+        );
+        room.users = room.users.filter(
+          (id) => id !== requestingUsers
+        );
+        room.requestingUsers = room.users.filter(
+          (id) => id !== requestingUsers
+        );
+      }
+
+      return room;
+    });
+
+    return await this.redis.setValues(updatedRoom);
+  }
 }
 
 export default RoomRepository;

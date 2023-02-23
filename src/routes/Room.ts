@@ -17,6 +17,7 @@ router.delete('/:roomId', controller.deleteRoom); // delete room
 router.delete('/delete/users', controller.deleteFromUsers) // delete user from accepted users list
 router.delete('/delete/requested', controller.deleteFromRequested) // delete user from requested users list
 router.delete('/delete/hosts', controller.deleteFromHosts) // delete user from hosts list
+router.delete('/delete/self', controller.leaveRoom) // delete user from hosts list
 
 router.patch('/join-user', controller.requestUserToJoin); // request user to room
 router.patch('/accept-user', controller.acceptRequest); // accept user request
