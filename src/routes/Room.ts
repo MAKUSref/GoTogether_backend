@@ -8,6 +8,7 @@ router.post('/', controller.createRoom); // create room
 router.get('/filter/hosted', controller.readHostedRooms); // get rooms by host id
 router.get('/filter/requested', controller.readRequestedRooms); // get all requested rooms
 router.get('/filter/accepted', controller.readAcceptedRooms); // get all accepted rooms
+router.get('/filter/pin/:pin', controller.readRoomByPin); // get room with specific pin
 router.get('/', controller.readRoom); // get all rooms
 router.get('/my-rooms', controller.readProfileRooms); // get all your rooms (hosted, joined, requested)
 router.get('/:roomId', controller.readSingleRoom); // get room by id

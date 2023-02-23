@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUser = exports.deleteUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
+exports.updateCoords = exports.loginUser = exports.deleteUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
 const User_1 = __importStar(require("../model/User"));
 const User_2 = __importDefault(require("../repositories/User"));
 const userRepo = new User_2.default();
@@ -78,3 +78,11 @@ const loginUser = (login, password) => __awaiter(void 0, void 0, void 0, functio
     return user;
 });
 exports.loginUser = loginUser;
+const updateCoords = (id, coords) => __awaiter(void 0, void 0, void 0, function* () {
+    const [user] = yield userRepo.getUserById(id);
+    if (user === undefined || user === null)
+        return false; // user does not exist
+    const res = userRepo.updateCoords(id, coords);
+    return true;
+});
+exports.updateCoords = updateCoords;

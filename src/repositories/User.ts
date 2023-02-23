@@ -1,3 +1,4 @@
+import { Coords } from '../model/Coords';
 import { IUser } from '../model/User';
 import Redis from '../redis/Redis';
 
@@ -34,6 +35,18 @@ class UserRepository {
   async deleteUser(id: string) {
     const users = (await this.getAll()).filter((user: IUser) => user.id !== id);
     await this.redis.setValues(users);
+  }
+
+  async updateCoords(id: string, coords: Coords): Promise<boolean> {
+    const users = (await this.getAll()).map((user) => {
+      if (user.id === id) {
+        return {...user, coords: {...coords}};
+      }
+
+      return user;
+    });
+
+    return await this.redis.setValues(users);
   }
 }
 

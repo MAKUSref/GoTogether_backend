@@ -1,3 +1,4 @@
+import { Coords } from "../model/Coords";
 import User, { IUser, USER_TYPE } from "../model/User";
 import UserRepository from "../repositories/User";
 
@@ -48,4 +49,14 @@ export const loginUser = async (login: string, password: string): Promise<IUser 
   if (user.password !== password) return; // bad password
 
   return user;
+}
+
+export const updateCoords = async (id: string, coords: Coords): Promise<boolean> => {
+  const [user] = await userRepo.getUserById(id);
+
+  if (user === undefined || user === null) return false; // user does not exist
+
+  const res = userRepo.updateCoords(id, coords);
+
+  return true;
 }
