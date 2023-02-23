@@ -76,8 +76,8 @@ const readProfileRooms = (userId) => __awaiter(void 0, void 0, void 0, function*
     };
 });
 exports.readProfileRooms = readProfileRooms;
-const readUsersInfoFromRoom = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
-    const [room] = yield roomRepo.getByRoomId(roomId);
+const readUsersInfoFromRoom = (roomPin) => __awaiter(void 0, void 0, void 0, function* () {
+    const [room] = yield roomRepo.getByRoomPin(roomPin);
     if (!room)
         return [];
     const hosts = yield Promise.all(room.hosts.map((userId) => __awaiter(void 0, void 0, void 0, function* () {

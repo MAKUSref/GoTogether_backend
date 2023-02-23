@@ -32,8 +32,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUser = exports.deleteUser = exports.readSingleUser = exports.readUser = exports.createUser = void 0;
+exports.updateCoords = exports.loginUser = exports.deleteUser = exports.readSingleUser = exports.readUser = exports.createUser = void 0;
 const userMenagers = __importStar(require("../managers/User"));
+const X_USER_ID = 'x-user-id';
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, login, password } = req.body;
     const createUserSuccess = yield userMenagers.createUser(name, login, password);
@@ -71,7 +72,6 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.deleteUser = deleteUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { login, password } = req.body;
-    console.log('logging');
     const user = yield userMenagers.loginUser(login, password);
     if (user) {
         return res.status(200).json({ user, message: "Login successfull" });
@@ -79,3 +79,13 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.status(400).json({ message: "Bad request." });
 });
 exports.loginUser = loginUser;
+const updateCoords = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.headers[X_USER_ID];
+    const { lat, long, radius, timestamp } = req.body;
+    const updateSuccessfull = yield userMenagers.updateCoords(userId, { lat, long, radius, timestamp });
+    if (updateSuccessfull) {
+        return res.status(200).send({ message: "Coords updated!" });
+    }
+    return res.status(400).send({ message: "Something went wrong!" });
+});
+exports.updateCoords = updateCoords;

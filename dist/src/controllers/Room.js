@@ -95,8 +95,8 @@ const readRoomByPin = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.readRoomByPin = readRoomByPin;
 const readUsersInfoFromRoom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const roomId = req.params.roomId;
-    const user = yield roomManager.readUsersInfoFromRoom(roomId);
+    const roomPin = Number(req.params.roomPin);
+    const user = yield roomManager.readUsersInfoFromRoom(roomPin);
     if (user.length > 0) {
         return res.status(200).json({ user });
     }

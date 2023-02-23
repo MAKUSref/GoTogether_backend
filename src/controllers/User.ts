@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import * as userMenagers from '../managers/User';
+import { Coords } from "../model/Coords";
+
+const X_USER_ID = 'x-user-id';
 
 export const createUser = async (req: Request, res: Response) => {
   const { name, login, password } = req.body;
@@ -49,9 +52,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   const { login, password }: {login: string, password: string} = req.body;
 
-  console.log('logging');
-  
-
   const user = await userMenagers.loginUser(login, password);
 
   if (user) {
@@ -59,4 +59,17 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 
   return res.status(400).json({ message: "Bad request." });
+}
+
+export const updateCoords = async (req: Request, res: Response) => {
+  const userId = req.headers[X_USER_ID] as string;
+  const {lat, long, radius, timestamp}: Coords = req.body;  
+
+  const updateSuccessfull = await userMenagers.updateCoords(userId, {lat, long, radius, timestamp});
+
+  if (updateSuccessfull) {
+    return res.status(200).send({ message: "Coords updated!" });
+  }
+
+  return res.status(400).send({ message: "Something went wrong!" });
 }

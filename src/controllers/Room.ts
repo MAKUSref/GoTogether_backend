@@ -83,9 +83,9 @@ export const readRoomByPin = async (req: Request, res: Response) => {
 }
 
 export const readUsersInfoFromRoom = async (req: Request, res: Response) => {
-  const roomId = req.params.roomId;
+  const roomPin = Number(req.params.roomPin);
 
-  const user: IUser[] = await roomManager.readUsersInfoFromRoom(roomId);
+  const user: IUser[] = await roomManager.readUsersInfoFromRoom(roomPin);
 
   if (user.length > 0) {
     return res.status(200).json({ user });

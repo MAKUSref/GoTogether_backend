@@ -72,8 +72,8 @@ export const readProfileRooms = async (userId: string): Promise<{ host: IRoom[],
   };
 }
 
-export const readUsersInfoFromRoom = async (roomId: string): Promise<IUser[]> => {
-  const [room] = await roomRepo.getByRoomId(roomId);
+export const readUsersInfoFromRoom = async (roomPin: number): Promise<IUser[]> => {
+  const [room] = await roomRepo.getByRoomPin(roomPin);
 
   if (!room) return [];
 
@@ -104,10 +104,7 @@ export const deleteRoom = async (roomId: string): Promise<boolean> => {
 export const deleteFromUsers = async (roomId: string, userId: string, requestingUserId: string): Promise<boolean> => {
   const user = await userRepo.getUserById(userId);
   const requestingUser = await userRepo.getUserById(requestingUserId);
-  const room = await roomRepo.getByRoomId(roomId);
-
-  console.log(user, requestingUser, room);
-  
+  const room = await roomRepo.getByRoomId(roomId);  
 
   if (!user.length) return false; // user does not exist
   if (!requestingUser.length) return false; // requesting user does not exist

@@ -52,7 +52,7 @@ export const loginUser = async (login: string, password: string): Promise<IUser 
 }
 
 export const updateCoords = async (id: string, coords: Coords): Promise<boolean> => {
-  const [user] = await userRepo.getUserById(id);
+  const [user] = await userRepo.getUserById(id);  
 
   if (user === undefined || user === null) return false; // user does not exist
 
