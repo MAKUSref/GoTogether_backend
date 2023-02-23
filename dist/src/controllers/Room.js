@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.acceptRequest = exports.requestUserToJoin = exports.deleteFromHosts = exports.deleteFromRequested = exports.deleteFromUsers = exports.deleteRoom = exports.createRoom = exports.readRoomByPin = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readHostedRooms = exports.readSingleRoom = exports.readRoom = void 0;
+exports.grantHost = exports.acceptRequest = exports.requestUserToJoin = exports.deleteFromHosts = exports.deleteFromRequested = exports.deleteFromUsers = exports.deleteRoom = exports.createRoom = exports.readRoomByPin = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readHostedRooms = exports.readSingleRoom = exports.readRoom = void 0;
 const roomManager = __importStar(require("../managers/Room"));
 const X_USER_ID = 'x-user-id';
 const readRoom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -154,10 +154,21 @@ const requestUserToJoin = (req, res) => __awaiter(void 0, void 0, void 0, functi
 exports.requestUserToJoin = requestUserToJoin;
 const acceptRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { roomId, userId } = req.body;
-    const isUserAccepted = yield roomManager.acceptRequest(roomId, userId);
+    const requestingUserId = req.headers[X_USER_ID];
+    const isUserAccepted = yield roomManager.acceptRequest(roomId, userId, requestingUserId);
     if (isUserAccepted) {
         return res.status(201).send({ message: "User accepted." });
     }
     return res.status(400).send({ message: "Something went wrong!" });
 });
 exports.acceptRequest = acceptRequest;
+const grantHost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { roomId, userId } = req.body;
+    const requestingUserId = req.headers[X_USER_ID];
+    const isUserAccepted = yield roomManager.grantHost(roomId, userId, requestingUserId);
+    if (isUserAccepted) {
+        return res.status(201).send({ message: "User accepted." });
+    }
+    return res.status(400).send({ message: "Something went wrong!" });
+});
+exports.grantHost = grantHost;

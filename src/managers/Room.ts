@@ -86,6 +86,9 @@ export const deleteFromUsers = async (roomId: string, userId: string, requesting
   const requestingUser = await userRepo.getUserById(requestingUserId);
   const room = await roomRepo.getByRoomId(roomId);
 
+  console.log(user, requestingUser, room);
+  
+
   if (!user.length) return false; // user does not exist
   if (!requestingUser.length) return false; // requesting user does not exist
   if (!room.length) return false; // room does not exist
@@ -136,13 +139,28 @@ export const requestUserToRoom = async (pin: number, userId: string): Promise<bo
   return await roomRepo.requestUserToRoom(pin, userId);
 }
 
-export const acceptRequest = async (roomId: string, userId: string): Promise<boolean> => {
+export const acceptRequest = async (roomId: string, userId: string, requestingUserId: string): Promise<boolean> => {
   const user = await userRepo.getUserById(userId);
   const room = await roomRepo.getByRoomId(roomId);
+  const requestingUser = await userRepo.getUserById(requestingUserId);
 
   if (!user.length) return false; // user does not exist
   if (!room.length) return false; // room does not exist
   if (!room[0].requestingUsers.includes(userId)) return false; // there is no request from this user
+  if (!room[0].hosts.includes(requestingUserId)) return false; // only hosts from this room can delete other users
 
   return await roomRepo.acceptUserRequest(roomId, userId);
+}
+
+export const grantHost = async (roomId: string, userId: string, requestingUserId: string): Promise<boolean> => {
+  const user = await userRepo.getUserById(userId);
+  const room = await roomRepo.getByRoomId(roomId);
+
+  
+  if (!user.length) return false; // user does not exist
+  if (!room.length) return false; // room does not exist
+  if (!room[0].users.includes(userId)) return false; // there is no request from this user
+  if (!room[0].hosts.includes(requestingUserId)) return false; // only hosts from this room can delete other users
+
+  return await roomRepo.grantHost(roomId, userId);
 }

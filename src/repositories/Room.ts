@@ -124,6 +124,24 @@ class RoomRepository {
 
     return await this.redis.setValues(updatedRoom);
   }
+
+  async grantHost(roomId: string, userId: string) {
+    const rooms = await this.getAll();
+
+    const updatedRoom = rooms.map((room) => {
+      if (room.id === roomId) {
+        room.users = room.users.filter(
+          (id) => id !== userId
+        );
+        room.hosts.push(userId);
+      }
+
+      return room;
+    });
+
+    return await this.redis.setValues(updatedRoom);
+  }
+
 }
 
 export default RoomRepository;

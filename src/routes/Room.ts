@@ -20,6 +20,6 @@ router.delete('/delete/hosts', controller.deleteFromHosts) // delete user from h
 
 router.patch('/join-user', controller.requestUserToJoin); // request user to room
 router.patch('/accept-user', controller.acceptRequest); // accept user request
-router.patch('/grant-host', () => {}); // grant host role to user
+router.patch('/grant-host', controller.grantHost); // grant host role to user
 
 export default router;

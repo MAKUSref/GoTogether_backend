@@ -43,5 +43,5 @@ router.delete('/delete/requested', controller.deleteFromRequested); // delete us
 router.delete('/delete/hosts', controller.deleteFromHosts); // delete user from hosts list
 router.patch('/join-user', controller.requestUserToJoin); // request user to room
 router.patch('/accept-user', controller.acceptRequest); // accept user request
-router.patch('/grant-host', () => { }); // grant host role to user
+router.patch('/grant-host', controller.grantHost); // grant host role to user
 exports.default = router;

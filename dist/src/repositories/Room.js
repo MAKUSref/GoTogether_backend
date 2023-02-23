@@ -127,5 +127,18 @@ class RoomRepository {
             return yield this.redis.setValues(updatedRoom);
         });
     }
+    grantHost(roomId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rooms = yield this.getAll();
+            const updatedRoom = rooms.map((room) => {
+                if (room.id === roomId) {
+                    room.users = room.users.filter((id) => id !== userId);
+                    room.hosts.push(userId);
+                }
+                return room;
+            });
+            return yield this.redis.setValues(updatedRoom);
+        });
+    }
 }
 exports.default = RoomRepository;

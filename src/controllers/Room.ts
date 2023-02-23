@@ -159,9 +159,24 @@ export const requestUserToJoin = async (req: Request, res: Response) => {
 
 export const acceptRequest = async (req: Request, res: Response) => {
   const { roomId, userId }: { roomId: string, userId: string } = req.body;
+  const requestingUserId = req.headers[X_USER_ID] as string;
 
-  const isUserAccepted = await roomManager.acceptRequest(roomId, userId);
+  const isUserAccepted = await roomManager.acceptRequest(roomId, userId, requestingUserId);
 
+  if (isUserAccepted) {
+    return res.status(201).send({ message: "User accepted." });
+  }
+
+  return res.status(400).send({ message: "Something went wrong!" });
+}
+
+export const grantHost = async (req: Request, res: Response) => {
+  
+  const { roomId, userId }: { roomId: string, userId: string } = req.body;
+  const requestingUserId = req.headers[X_USER_ID] as string;
+
+  const isUserAccepted = await roomManager.grantHost(roomId, userId, requestingUserId);
+  
   if (isUserAccepted) {
     return res.status(201).send({ message: "User accepted." });
   }

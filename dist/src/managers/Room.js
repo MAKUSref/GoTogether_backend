@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByPin = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
+exports.grantHost = exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByPin = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
 const Room_1 = __importDefault(require("../model/Room"));
 const User_1 = require("../model/User");
 const Room_2 = __importDefault(require("../repositories/Room"));
@@ -88,6 +88,7 @@ const deleteFromUsers = (roomId, userId, requestingUserId) => __awaiter(void 0, 
     const user = yield userRepo.getUserById(userId);
     const requestingUser = yield userRepo.getUserById(requestingUserId);
     const room = yield roomRepo.getByRoomId(roomId);
+    console.log(user, requestingUser, room);
     if (!user.length)
         return false; // user does not exist
     if (!requestingUser.length)
@@ -151,15 +152,32 @@ const requestUserToRoom = (pin, userId) => __awaiter(void 0, void 0, void 0, fun
     return yield roomRepo.requestUserToRoom(pin, userId);
 });
 exports.requestUserToRoom = requestUserToRoom;
-const acceptRequest = (roomId, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const acceptRequest = (roomId, userId, requestingUserId) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userRepo.getUserById(userId);
     const room = yield roomRepo.getByRoomId(roomId);
+    const requestingUser = yield userRepo.getUserById(requestingUserId);
     if (!user.length)
         return false; // user does not exist
     if (!room.length)
         return false; // room does not exist
     if (!room[0].requestingUsers.includes(userId))
         return false; // there is no request from this user
+    if (!room[0].hosts.includes(requestingUserId))
+        return false; // only hosts from this room can delete other users
     return yield roomRepo.acceptUserRequest(roomId, userId);
 });
 exports.acceptRequest = acceptRequest;
+const grantHost = (roomId, userId, requestingUserId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield userRepo.getUserById(userId);
+    const room = yield roomRepo.getByRoomId(roomId);
+    if (!user.length)
+        return false; // user does not exist
+    if (!room.length)
+        return false; // room does not exist
+    if (!room[0].users.includes(userId))
+        return false; // there is no request from this user
+    if (!room[0].hosts.includes(requestingUserId))
+        return false; // only hosts from this room can delete other users
+    return yield roomRepo.grantHost(roomId, userId);
+});
+exports.grantHost = grantHost;
