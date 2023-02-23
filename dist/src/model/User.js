@@ -12,6 +12,7 @@ var USER_TYPE;
 })(USER_TYPE = exports.USER_TYPE || (exports.USER_TYPE = {}));
 class User {
     constructor(name, login, password, type, id = (0, uuid4_1.default)()) {
+        this.coords = undefined;
         this.id = id;
         this.name = name;
         this.login = login;

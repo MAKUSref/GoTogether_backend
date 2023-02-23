@@ -1,4 +1,5 @@
 import uuid4 from "uuid4";
+import { Coords } from "./Coords";
 
 export enum USER_TYPE {
   User = 'User',
@@ -11,6 +12,7 @@ export interface IUser {
   login: string;
   password: string;
   type: USER_TYPE;
+  coords: Coords | undefined;
 } 
 
 class User implements IUser {
@@ -19,6 +21,7 @@ class User implements IUser {
   login: string;
   password: string;
   type: USER_TYPE;
+  coords: Coords | undefined = undefined;
 
   constructor(name: string, login: string, password: string, type: USER_TYPE, id: string = uuid4()) {
     this.id = id;

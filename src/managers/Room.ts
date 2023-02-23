@@ -42,6 +42,12 @@ export const readRoomByHostId = async (hostId: string): Promise<IRoom[]> => {
   return rooms;
 }
 
+export const readRoomByPin = async (pin: number): Promise<IRoom[]> => {
+  const rooms = await roomRepo.getByRoomPin(pin);
+
+  return rooms;
+}
+
 export const readRequestedRooms = async (userId: string): Promise<IRoom[]> => {
   const rooms = await roomRepo.getByRequestedUserId(userId);
 

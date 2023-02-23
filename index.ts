@@ -1,6 +1,5 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { Server } from "socket.io";
 import http from "http";
 import roomRoutes from './src/routes/Room';
 import userRoutes from './src/routes/User';
@@ -37,16 +36,6 @@ const router = express();
     console.log(`[server]: control status get`);
 
     res.status(200).json({ status: "OK" });
-  });
-
-  const io = new Server(server);
-
-  io.on("connection", (socket) => {
-    console.log(`[server][io]: user connected.`);
-
-    socket.on("disconnect", () => {
-      console.log("[server][io]: user disconnected");
-    });
   });
 
   server.listen(port, () => {

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
+exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByPin = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
 const Room_1 = __importDefault(require("../model/Room"));
 const User_1 = require("../model/User");
 const Room_2 = __importDefault(require("../repositories/Room"));
@@ -50,6 +50,11 @@ const readRoomByHostId = (hostId) => __awaiter(void 0, void 0, void 0, function*
     return rooms;
 });
 exports.readRoomByHostId = readRoomByHostId;
+const readRoomByPin = (pin) => __awaiter(void 0, void 0, void 0, function* () {
+    const rooms = yield roomRepo.getByRoomPin(pin);
+    return rooms;
+});
+exports.readRoomByPin = readRoomByPin;
 const readRequestedRooms = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const rooms = yield roomRepo.getByRequestedUserId(userId);
     return rooms;

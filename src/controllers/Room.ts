@@ -69,6 +69,18 @@ export const readProfileRooms = async (req: Request, res: Response) => {
   return res.status(200).json({...rooms});
 }
 
+export const readRoomByPin = async (req: Request, res: Response) => {
+  const pin = req.params.pin;
+
+  const room = await roomManager.readRoomByPin(Number(pin));
+
+  if (room !== undefined && room !== null) {
+    return res.status(200).json({ room });
+  }
+
+  return res.status(404).json({ room, message: "No rooms were found." });
+}
+
 export const createRoom = async (req: Request, res: Response) => {
   const userId = req.headers[X_USER_ID] as string;
   const { name } = req.body;

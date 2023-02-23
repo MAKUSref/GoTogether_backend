@@ -54,5 +54,16 @@ class UserRepository {
             yield this.redis.setValues(users);
         });
     }
+    updateCoords(id, coords) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const users = (yield this.getAll()).map((user) => {
+                if (user.id === id) {
+                    return Object.assign(Object.assign({}, user), { coords: Object.assign({}, coords) });
+                }
+                return user;
+            });
+            return yield this.redis.setValues(users);
+        });
+    }
 }
 exports.default = UserRepository;

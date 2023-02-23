@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.acceptRequest = exports.requestUserToJoin = exports.deleteFromHosts = exports.deleteFromRequested = exports.deleteFromUsers = exports.deleteRoom = exports.createRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readHostedRooms = exports.readSingleRoom = exports.readRoom = void 0;
+exports.acceptRequest = exports.requestUserToJoin = exports.deleteFromHosts = exports.deleteFromRequested = exports.deleteFromUsers = exports.deleteRoom = exports.createRoom = exports.readRoomByPin = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readHostedRooms = exports.readSingleRoom = exports.readRoom = void 0;
 const roomManager = __importStar(require("../managers/Room"));
 const X_USER_ID = 'x-user-id';
 const readRoom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -85,6 +85,15 @@ const readProfileRooms = (req, res) => __awaiter(void 0, void 0, void 0, functio
     return res.status(200).json(Object.assign({}, rooms));
 });
 exports.readProfileRooms = readProfileRooms;
+const readRoomByPin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pin = req.params.pin;
+    const room = yield roomManager.readRoomByPin(Number(pin));
+    if (room !== undefined && room !== null) {
+        return res.status(200).json({ room });
+    }
+    return res.status(404).json({ room, message: "No rooms were found." });
+});
+exports.readRoomByPin = readRoomByPin;
 const createRoom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.headers[X_USER_ID];
     const { name } = req.body;
