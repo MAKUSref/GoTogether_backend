@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grantHost = exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByPin = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
+exports.grantHost = exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readUsersInfoFromRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByPin = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
 const Room_1 = __importDefault(require("../model/Room"));
 const User_1 = require("../model/User");
 const Room_2 = __importDefault(require("../repositories/Room"));
@@ -76,6 +76,21 @@ const readProfileRooms = (userId) => __awaiter(void 0, void 0, void 0, function*
     };
 });
 exports.readProfileRooms = readProfileRooms;
+const readUsersInfoFromRoom = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    const [room] = yield roomRepo.getByRoomId(roomId);
+    if (!room)
+        return [];
+    const hosts = yield Promise.all(room.hosts.map((userId) => __awaiter(void 0, void 0, void 0, function* () {
+        const [host] = yield userRepo.getUserById(userId);
+        return host;
+    })));
+    const users = yield Promise.all(room.users.map((userId) => __awaiter(void 0, void 0, void 0, function* () {
+        const [host] = yield userRepo.getUserById(userId);
+        return host;
+    })));
+    return [...hosts, ...users];
+});
+exports.readUsersInfoFromRoom = readUsersInfoFromRoom;
 const deleteRoom = (roomId) => __awaiter(void 0, void 0, void 0, function* () {
     const [room] = yield roomRepo.getByRoomId(roomId);
     if (!room)

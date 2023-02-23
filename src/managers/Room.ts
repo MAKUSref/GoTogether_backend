@@ -1,5 +1,5 @@
 import Room, { IRoom } from "../model/Room";
-import { USER_TYPE } from "../model/User";
+import { IUser, USER_TYPE } from "../model/User";
 import RoomRepository from "../repositories/Room";
 import UserRepository from "../repositories/User";
 import { generatePin } from './utils';
@@ -70,6 +70,26 @@ export const readProfileRooms = async (userId: string): Promise<{ host: IRoom[],
     user: joinedRooms,
     request: requestedRooms
   };
+}
+
+export const readUsersInfoFromRoom = async (roomId: string): Promise<IUser[]> => {
+  const [room] = await roomRepo.getByRoomId(roomId);
+
+  if (!room) return [];
+
+  const hosts = await Promise.all(room.hosts.map(async (userId) => {
+    const [host] = await userRepo.getUserById(userId);
+
+    return host;
+  }));
+
+  const users = await Promise.all(room.users.map(async (userId) => {
+    const [host] = await userRepo.getUserById(userId);
+
+    return host;
+  }));
+
+  return [...hosts, ...users];
 }
 
 export const deleteRoom = async (roomId: string): Promise<boolean> => {

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as roomManager from "../managers/Room";
+import { IUser } from "../model/User";
 
 const X_USER_ID = 'x-user-id';
 
@@ -79,6 +80,18 @@ export const readRoomByPin = async (req: Request, res: Response) => {
   }
 
   return res.status(404).json({ room, message: "No rooms were found." });
+}
+
+export const readUsersInfoFromRoom = async (req: Request, res: Response) => {
+  const roomId = req.params.roomId;
+
+  const user: IUser[] = await roomManager.readUsersInfoFromRoom(roomId);
+
+  if (user.length > 0) {
+    return res.status(200).json({ user });
+  }
+
+  return res.status(404).send({ message: "Not found!" })
 }
 
 export const createRoom = async (req: Request, res: Response) => {
