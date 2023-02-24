@@ -14,18 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.grantHost = exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readUsersInfoFromRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByPin = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
 const Room_1 = __importDefault(require("../model/Room"));
-const User_1 = require("../model/User");
 const Room_2 = __importDefault(require("../repositories/Room"));
-const User_2 = __importDefault(require("../repositories/User"));
+const User_1 = __importDefault(require("../repositories/User"));
 const utils_1 = require("./utils");
 const roomRepo = new Room_2.default();
-const userRepo = new User_2.default();
+const userRepo = new User_1.default();
 const createRoom = (userId, name) => __awaiter(void 0, void 0, void 0, function* () {
     const [user] = yield userRepo.getUserById(userId);
     if (!user)
         return false; // user does not exist
-    if (user.type === User_1.USER_TYPE.Guest)
-        return false; // Guest cannot make rooms
     if (!name)
         return false; // name cannot be empty string
     const pins = (yield roomRepo.getAll()).map((room) => room.pin);
@@ -103,7 +100,6 @@ const deleteFromUsers = (roomId, userId, requestingUserId) => __awaiter(void 0, 
     const user = yield userRepo.getUserById(userId);
     const requestingUser = yield userRepo.getUserById(requestingUserId);
     const room = yield roomRepo.getByRoomId(roomId);
-    console.log(user, requestingUser, room);
     if (!user.length)
         return false; // user does not exist
     if (!requestingUser.length)

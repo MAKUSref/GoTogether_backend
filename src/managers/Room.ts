@@ -11,7 +11,6 @@ export const createRoom = async (userId: string, name: string): Promise<boolean>
   const [user] = await userRepo.getUserById(userId);
 
   if (!user) return false; // user does not exist
-  if (user.type === USER_TYPE.Guest) return false; // Guest cannot make rooms
   if (!name) return false; // name cannot be empty string
 
   const pins = (await roomRepo.getAll()).map((room: IRoom) => room.pin);
