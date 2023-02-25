@@ -196,3 +196,18 @@ export const grantHost = async (req: Request, res: Response) => {
 
   return res.status(400).send({ message: "Something went wrong!" });
 }
+
+
+export const leaveRoom = async (req: Request, res: Response) => {
+  
+  const { roomId }: { roomId: string, userId: string } = req.body;
+  const requestingUserId = req.headers[X_USER_ID] as string;
+
+  const userLeft = await roomManager.leaveRoom(roomId, requestingUserId);
+  
+  if (userLeft) {
+    return res.status(201).send({ message: "User accepted." });
+  }
+
+  return res.status(400).send({ message: "Something went wrong!" });
+}

@@ -180,3 +180,22 @@ export const grantHost = async (roomId: string, userId: string, requestingUserId
 
   return await roomRepo.grantHost(roomId, userId);
 }
+
+export const leaveRoom = async (roomId: string, requestingUserId: string): Promise<boolean> => {
+  const room = await roomRepo.getByRoomId(roomId);
+  const requestingUser = await userRepo.getUserById(requestingUserId);
+
+  
+  if (!requestingUser.length) return false; // user does not exist
+  if (!room.length) return false; // room does not exist
+
+  if (!room[0].users.includes(requestingUserId) 
+  && !room[0].hosts.includes(requestingUserId) 
+  && !room[0].requestingUsers.includes(requestingUserId)) return false; // user is not in this room
+
+  if(room[0].hosts.includes(requestingUserId) && room[0].hosts.length === 1){
+    return await roomRepo.deleteRoom(roomId);
+  }else{
+    return await roomRepo.leaveRoom(roomId, requestingUserId);
+  }
+}

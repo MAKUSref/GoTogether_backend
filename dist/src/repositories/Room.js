@@ -63,7 +63,7 @@ class RoomRepository {
     deleteRoom(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const rooms = (yield this.getAll()).filter((room) => room.id !== id);
-            yield this.redis.setValues(rooms);
+            return yield this.redis.setValues(rooms);
         });
     }
     deleteFromUserList(roomId, userId) {
@@ -134,6 +134,20 @@ class RoomRepository {
                 if (room.id === roomId) {
                     room.users = room.users.filter((id) => id !== userId);
                     room.hosts.push(userId);
+                }
+                return room;
+            });
+            return yield this.redis.setValues(updatedRoom);
+        });
+    }
+    leaveRoom(roomId, requestingUsers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rooms = yield this.getAll();
+            const updatedRoom = rooms.map((room) => {
+                if (room.id === roomId) {
+                    room.hosts = room.users.filter((id) => id !== requestingUsers);
+                    room.users = room.users.filter((id) => id !== requestingUsers);
+                    room.requestingUsers = room.users.filter((id) => id !== requestingUsers);
                 }
                 return room;
             });

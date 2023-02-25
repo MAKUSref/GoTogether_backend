@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grantHost = exports.acceptRequest = exports.requestUserToJoin = exports.deleteFromHosts = exports.deleteFromRequested = exports.deleteFromUsers = exports.deleteRoom = exports.createRoom = exports.readUsersInfoFromRoom = exports.readRoomByPin = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readHostedRooms = exports.readSingleRoom = exports.readRoom = void 0;
+exports.leaveRoom = exports.grantHost = exports.acceptRequest = exports.requestUserToJoin = exports.deleteFromHosts = exports.deleteFromRequested = exports.deleteFromUsers = exports.deleteRoom = exports.createRoom = exports.readUsersInfoFromRoom = exports.readRoomByPin = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readHostedRooms = exports.readSingleRoom = exports.readRoom = void 0;
 const roomManager = __importStar(require("../managers/Room"));
 const X_USER_ID = 'x-user-id';
 const readRoom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -181,3 +181,13 @@ const grantHost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.status(400).send({ message: "Something went wrong!" });
 });
 exports.grantHost = grantHost;
+const leaveRoom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { roomId } = req.body;
+    const requestingUserId = req.headers[X_USER_ID];
+    const userLeft = yield roomManager.leaveRoom(roomId, requestingUserId);
+    if (userLeft) {
+        return res.status(201).send({ message: "User accepted." });
+    }
+    return res.status(400).send({ message: "Something went wrong!" });
+});
+exports.leaveRoom = leaveRoom;

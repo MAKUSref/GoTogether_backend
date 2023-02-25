@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grantHost = exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readUsersInfoFromRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByPin = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
+exports.leaveRoom = exports.grantHost = exports.acceptRequest = exports.requestUserToRoom = exports.deleteFromRequestedList = exports.deleteFromHosts = exports.deleteFromUsers = exports.deleteRoom = exports.readUsersInfoFromRoom = exports.readProfileRooms = exports.readAcceptedRooms = exports.readRequestedRooms = exports.readRoomByPin = exports.readRoomByHostId = exports.readRoom = exports.readRooms = exports.createRoom = void 0;
 const Room_1 = __importDefault(require("../model/Room"));
 const Room_2 = __importDefault(require("../repositories/Room"));
 const User_1 = __importDefault(require("../repositories/User"));
@@ -192,3 +192,22 @@ const grantHost = (roomId, userId, requestingUserId) => __awaiter(void 0, void 0
     return yield roomRepo.grantHost(roomId, userId);
 });
 exports.grantHost = grantHost;
+const leaveRoom = (roomId, requestingUserId) => __awaiter(void 0, void 0, void 0, function* () {
+    const room = yield roomRepo.getByRoomId(roomId);
+    const requestingUser = yield userRepo.getUserById(requestingUserId);
+    if (!requestingUser.length)
+        return false; // user does not exist
+    if (!room.length)
+        return false; // room does not exist
+    if (!room[0].users.includes(requestingUserId)
+        && !room[0].hosts.includes(requestingUserId)
+        && !room[0].requestingUsers.includes(requestingUserId))
+        return false; // user is not in this room
+    if (room[0].hosts.includes(requestingUserId) && room[0].hosts.length === 1) {
+        return yield roomRepo.deleteRoom(roomId);
+    }
+    else {
+        return yield roomRepo.leaveRoom(roomId, requestingUserId);
+    }
+});
+exports.leaveRoom = leaveRoom;
