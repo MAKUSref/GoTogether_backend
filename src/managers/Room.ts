@@ -193,9 +193,5 @@ export const leaveRoom = async (roomId: string, requestingUserId: string): Promi
   && !room[0].hosts.includes(requestingUserId) 
   && !room[0].requestingUsers.includes(requestingUserId)) return false; // user is not in this room
 
-  if(room[0].hosts.includes(requestingUserId) && room[0].hosts.length === 1){
-    return await roomRepo.deleteRoom(roomId);
-  }else{
     return await roomRepo.leaveRoom(roomId, requestingUserId);
-  }
 }

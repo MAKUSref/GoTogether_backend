@@ -203,11 +203,6 @@ const leaveRoom = (roomId, requestingUserId) => __awaiter(void 0, void 0, void 0
         && !room[0].hosts.includes(requestingUserId)
         && !room[0].requestingUsers.includes(requestingUserId))
         return false; // user is not in this room
-    if (room[0].hosts.includes(requestingUserId) && room[0].hosts.length === 1) {
-        return yield roomRepo.deleteRoom(roomId);
-    }
-    else {
-        return yield roomRepo.leaveRoom(roomId, requestingUserId);
-    }
+    return yield roomRepo.leaveRoom(roomId, requestingUserId);
 });
 exports.leaveRoom = leaveRoom;
